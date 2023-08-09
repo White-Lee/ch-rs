@@ -1,43 +1,70 @@
-use font_kit::font::Font;
-use font_kit::handle::Handle;
-use font_kit::source::SystemSource;
+use iced::font::{Family, Stretch, Weight};
+use iced::widget::{button, column, text};
+use iced::{Alignment, Element, Font, Sandbox, Settings};
 
 #[cfg(any(target_family = "windows", target_os = "macos"))]
-static SANS_SERIF_FONT_REGULAR_POSTSCRIPT_NAME: &'static str = "ArialMT";
+static SANS_SERIF_FONT_REGULAR_POSTSCRIPT_NAME: &'static str = "仿宋";
 #[cfg(not(any(target_family = "windows", target_os = "macos")))]
 static SANS_SERIF_FONT_REGULAR_POSTSCRIPT_NAME: &'static str = "DejaVuSans";
 
-fn main() {
-    query_all_fonts();
+pub fn main() -> iced::Result {
+    let font = Font {
+        family: Family::Name(SANS_SERIF_FONT_REGULAR_POSTSCRIPT_NAME),
+        weight: Weight::Normal,
+        stretch: Stretch::Normal,
+        monospaced: false,
+    };
+    Counter::run(Settings {
+        id: None,
+        window: Default::default(),
+        flags: Default::default(),
+        default_font: font,
+        default_text_size: 16.0,
+        antialiasing: false,
+        exit_on_close_request: true,
+    })
 }
 
-/// 获取所有字体
-fn query_all_fonts() -> Vec<Handle> {
-    let source = SystemSource::new();
-    let fonts = source.all_fonts().unwrap();
-    println!("{}", fonts.len());
-    for font in &fonts {
-        if let Ok(font) = font.load() {
-            let properties = font.properties();
-            println!("postscript_name = {}, name = {}, family_name = {}, style = {}, weight.0 = {}, stretch.0 = {}", 
-                font.postscript_name().unwrap_or_else(|| "".to_owned()), 
-                font.full_name(), 
-                font.family_name(),
-                &properties.style.to_string(),
-                properties.weight.0.to_string(),
-                properties.stretch.0.to_string()
-            );
+struct Counter {
+    value: i32,
+}
+
+#[derive(Debug, Clone, Copy)]
+enum Message {
+    IncrementPressed,
+    DecrementPressed,
+}
+
+impl Sandbox for Counter {
+    type Message = Message;
+
+    fn new() -> Self {
+        Self { value: 0 }
+    }
+
+    fn title(&self) -> String {
+        String::from("Counter - Iced 你好")
+    }
+
+    fn update(&mut self, message: Message) {
+        match message {
+            Message::IncrementPressed => {
+                self.value += 1;
+            }
+            Message::DecrementPressed => {
+                self.value -= 1;
+            }
         }
     }
-    fonts
-}
 
-/// 获取指定字体
-fn query_defalut_font(postscript_name: &str) -> Font {
-    let font = SystemSource::new()
-        .select_by_postscript_name(&postscript_name)
-        .expect("Font not found")
-        .load()
-        .unwrap();
-    font
+    fn view(&self) -> Element<Message> {
+        column![
+            button("加一").on_press(Message::IncrementPressed),
+            text(self.value).size(50),
+            button("减一").on_press(Message::DecrementPressed)
+        ]
+        .padding(20)
+        .align_items(Alignment::Center)
+        .into()
+    }
 }
