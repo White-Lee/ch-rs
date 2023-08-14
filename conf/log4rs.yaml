@@ -5,10 +5,21 @@ appenders:
     encoder:
       pattern: "{d(%Y-%m-%d %H:%M:%S)} | {({l}):5.5} | [{t}] [{T}] - {m}{n}"
   file:
-    kind: file
+    kind: rolling_file
     path: "log/ch-rs.log"
     encoder:
       pattern: "{d(%Y-%m-%d %H:%M:%S)} | {({l}):5.5} | [{t}] [{T}] - {m}{n}"
+    policy:
+      kind: compound 
+      trigger:
+        kind: size
+        limit: 64 kb
+      roller:
+        kind: delete
+        kind: fixed_window
+        pattern: "log/ch-rs-{}-.log" 
+        base: 0
+        count: 5
 root:
   level: info
   appenders:
