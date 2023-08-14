@@ -2,30 +2,21 @@ refresh_rate: 30 seconds
 appenders:
   stdout:
     kind: console
-  info_log:
-    kind: rolling_file
+    encoder:
+      pattern: "{d(%Y-%m-%d %H:%M:%S)} | {({l}):5.5} | [{t}] [{T}] - {m}{n}"
+  file:
+    kind: file
     path: "log/ch-rs.log"
     encoder:
       pattern: "{d(%Y-%m-%d %H:%M:%S)} | {({l}):5.5} | [{t}] [{T}] - {m}{n}"
-    policy:
-      trigger:
-        kind: size
-        limit: 500mb
-      roller:
-        kind: fixed_window
-        pattern: log/ch-rs_{}.gz
-        count: 5
-        base: 1
 root:
   level: info
   appenders:
     - stdout
-    - info_log
+    - file
 loggers:
-  app::backend::db:
-    level: info
-  app::requests:
+  file:
     level: info
     appenders:
-      - requests
+      - file
     additive: false
