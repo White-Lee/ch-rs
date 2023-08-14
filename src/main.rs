@@ -1,70 +1,19 @@
-use iced::font::{Family, Stretch, Weight};
-use iced::widget::{button, column, text};
-use iced::{Alignment, Element, Font, Sandbox, Settings};
+#![windows_subsystem = "windows"]
 
-#[cfg(any(target_family = "windows", target_os = "macos"))]
-static SANS_SERIF_FONT_REGULAR_POSTSCRIPT_NAME: &'static str = "仿宋";
-#[cfg(not(any(target_family = "windows", target_os = "macos")))]
-static SANS_SERIF_FONT_REGULAR_POSTSCRIPT_NAME: &'static str = "DejaVuSans";
+use log4rs;
+use log::{error, info, warn};
 
-pub fn main() -> iced::Result {
-    let font = Font {
-        family: Family::Name(SANS_SERIF_FONT_REGULAR_POSTSCRIPT_NAME),
-        weight: Weight::Normal,
-        stretch: Stretch::Normal,
-        monospaced: false,
-    };
-    Counter::run(Settings {
-        id: None,
-        window: Default::default(),
-        flags: Default::default(),
-        default_font: font,
-        default_text_size: 16.0,
-        antialiasing: false,
-        exit_on_close_request: true,
-    })
+slint::include_modules!();
+
+fn main() -> Result<(), slint::PlatformError> {
+    init_logging();
+    info!("开始");
+    warn!("booting up");
+    let ui = AppWindow::new()?;
+    ui.run()
 }
 
-struct Counter {
-    value: i32,
-}
-
-#[derive(Debug, Clone, Copy)]
-enum Message {
-    IncrementPressed,
-    DecrementPressed,
-}
-
-impl Sandbox for Counter {
-    type Message = Message;
-
-    fn new() -> Self {
-        Self { value: 0 }
-    }
-
-    fn title(&self) -> String {
-        String::from("Counter - Iced 你好")
-    }
-
-    fn update(&mut self, message: Message) {
-        match message {
-            Message::IncrementPressed => {
-                self.value += 1;
-            }
-            Message::DecrementPressed => {
-                self.value -= 1;
-            }
-        }
-    }
-
-    fn view(&self) -> Element<Message> {
-        column![
-            button("加一").on_press(Message::IncrementPressed),
-            text(self.value).size(50),
-            button("减一").on_press(Message::DecrementPressed)
-        ]
-        .padding(20)
-        .align_items(Alignment::Center)
-        .into()
-    }
+fn init_logging() {
+    log4rs::init_file("conf/log4rs.yaml", Default::default()).unwrap();
+    error!("错误");
 }
