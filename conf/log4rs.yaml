@@ -13,10 +13,9 @@ appenders:
       kind: compound 
       trigger:
         kind: size
-        limit: 64 kb
+        limit: 500 mb
       roller:
         kind: delete
-        kind: fixed_window
         pattern: "log/ch-rs-{}-.log" 
         base: 0
         count: 5

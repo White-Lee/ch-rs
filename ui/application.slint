@@ -1,11 +1,17 @@
-import { SideBar } from "side_bar.slint";
-import { Home } from "home.slint";
-import { Setting } from "setting.slint";
-import { About } from "about.slint";
+import { SideBar } from "pages/components/side_bar.slint";
+import { Home } from "pages/home.slint";
+import { Setting } from "pages/setting.slint";
+import { About } from "pages/about.slint";
+import { DatabaseConf } from "pages/database_conf.slint";
+import { SQLScriptExecutor } from "pages/sql_script_executor.slint";
+
+import { Switch } from "std-widgets.slint";
 
 export component AppWindow inherits Window {
     preferred-width: 1024px;
     preferred-height: 768px;
+    min-width: 1024px;
+    min-height: 768px;
     title: @tr("ch-rs");
     icon: @image-url("./images/logo/logo.png");
 
@@ -14,7 +20,7 @@ export component AppWindow inherits Window {
             title: @tr("ch-rs");
             model: [
                 @tr("Menu" => "首页"), 
-                @tr("Menu" => "执行脚本"), 
+                @tr("Menu" => "数据库配置"), 
                 @tr("Menu" => "执行脚本"), 
                 @tr("Menu" => "设置"), 
                 @tr("Menu" => "关于")
@@ -22,8 +28,8 @@ export component AppWindow inherits Window {
         }
 
         if(side-bar.current-item == 0) : Home {}
-        if(side-bar.current-item == 1) : Home {}
-        if(side-bar.current-item == 2) : Home {}
+        if(side-bar.current-item == 1) : DatabaseConf {}
+        if(side-bar.current-item == 2) : SQLScriptExecutor {}
         if(side-bar.current-item == 3) : Setting {}
         if(side-bar.current-item == 4) : About {}
     }

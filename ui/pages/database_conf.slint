@@ -1,0 +1,171 @@
+import { Button, GroupBox, SpinBox, ComboBox, CheckBox, LineEdit, TabWidget, VerticalBox, HorizontalBox,
+    Slider, ProgressIndicator, SpinBox, Switch } from "std-widgets.slint";
+import { Page } from "components/page.slint";
+
+export component DatabaseConf inherits Page { 
+    title: @tr("数据库配置");
+    
+    width: 100%;
+    height: 100%;
+
+    GroupBox {
+        vertical-stretch: 0;
+        title: @tr("Buttons");
+
+        HorizontalBox {
+            alignment: start;
+            padding: 0px;
+
+            Button {
+                text: @tr("Regular Button");
+            }
+
+            Button {
+                text: @tr("Primary Button with Icon");
+                // icon: @image-url("../../thumbsup.png");
+                primary: true;
+            }
+
+            Button {
+                // icon: @image-url("../../thumbsup.png");
+                primary: true;
+            }
+
+            Button {
+                checkable: true;
+                text: self.checked ? @tr("ON") : @tr("OFF");
+            }
+        }
+    }
+
+    GroupBox {
+        title: @tr("CheckBox - SpinBox - ComboBox - Switch");
+        vertical-stretch: 0;
+
+        HorizontalBox {
+            alignment: start;
+            padding: 0px;
+
+            checkbox := CheckBox {
+                text: checkbox.checked ? @tr("(checked)") : @tr("(unchecked)");
+                checked: true;
+            }
+
+            ComboBox {
+                model: [@tr("Select Something"), @tr("From this"), @tr("Combobox")];
+            }
+
+            Switch {
+                text: @tr("Flight Mode");
+                checked: true;
+            }
+        }
+    }
+
+    GroupBox {
+        title: @tr("LineEdit - SpinBox");
+        vertical-stretch: 0;
+
+        HorizontalBox {
+            alignment: start;
+            padding: 0px;
+
+            LineEdit {
+                placeholder-text: @tr("Enter some text");
+            }
+
+            SpinBox {
+                vertical-stretch: 0;
+                value: 42;
+            }
+        }
+    }
+
+    GroupBox {
+        title: @tr("Slider");
+        vertical-stretch: 0;
+
+        i-slider := Slider {
+            min-width: 160px;
+            minimum: -100;
+            maximum: 100;
+            value: 42;
+        }
+    }
+
+    GroupBox {
+        title: @tr("ProgressIndicator");
+        vertical-stretch: 0;
+
+        VerticalLayout {
+            spacing: 16px;
+
+            i-progress-indicator := ProgressIndicator {
+                min-width: 160px;
+                progress: (i-slider.value - i-slider.minimum) / (i-slider.maximum - i-slider.minimum);
+                indeterminate: true;
+            }
+
+            CheckBox {
+                text: @tr("indeterminate");
+                checked <=> i-progress-indicator.indeterminate;
+            }
+        }
+    }
+
+    GroupBox {
+        title: @tr("TabWidget");
+
+        TabWidget {
+            Tab {
+                title: @tr("Tab 1");
+
+                VerticalBox {
+                    alignment: start;
+
+                    GroupBox {
+                        title: @tr("Content of tab 1");
+
+                        HorizontalBox {
+                            alignment: start;
+
+                            Button {
+                                text: @tr("Click me");
+                            }
+                        }
+                    }
+                }
+            }
+
+            Tab {
+                title: @tr("Tab 2");
+
+                VerticalBox {
+                    alignment: start;
+
+                    GroupBox {
+                        title: @tr("Content of tab 2");
+
+                        VerticalBox {
+                            alignment: start;
+
+                            CheckBox {
+                                text: @tr("Check me");
+                            }
+                        }
+                    }
+                }
+            }
+
+            Tab {
+                title: @tr("Tab 3");
+
+                VerticalBox {
+                    Text {
+                        text: @tr("Content of tab 3");
+                    }
+                }
+            }
+        }
+    }
+}

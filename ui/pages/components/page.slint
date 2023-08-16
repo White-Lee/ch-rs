@@ -1,0 +1,32 @@
+import { Switch, GridBox, ListView, ScrollView, VerticalBox } from "std-widgets.slint";
+
+export component Page inherits VerticalBox {
+    in property<string> title: "title";
+    in property<string> description: "";
+    width: 100%;
+    height: 100%;
+    HorizontalLayout {
+        height: 24px;
+        Text {
+            font-size: 18px;
+            text <=> root.title;
+        }
+
+        Text {
+            font-size: 12px;
+            text <=> root.description;
+            padding-top: 20px;
+        }
+
+        // Spacer
+        Rectangle {}
+
+        Switch {
+            horizontal-stretch: 0;
+            text: @tr("dark");
+            enabled: true;
+        }
+    }
+
+    @children
+}

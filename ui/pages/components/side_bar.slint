@@ -7,7 +7,6 @@ component SideBarItem inherits Rectangle {
     in property<bool> has-focus;
 
     min-height: l.preferred-height;
-
     state := Rectangle {
         opacity: 0;
         background: StyleMetrics.window-background;
@@ -53,7 +52,7 @@ export component SideBar inherits Rectangle {
     in property<string> title <=> label.text;
     out property<int> current-focused: fs.has-focus ? fs.focused-tab : -1; // The currently focused tab
     width: 180px;
-
+    background: #333333;
     forward-focus: fs;
 
     accessible-role: tab;
